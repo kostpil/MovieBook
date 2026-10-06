@@ -1,122 +1,110 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react';
+import Login from './components/Login';
+import Register from './components/Register';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isLogin, setIsLogin] = useState(true);
+  const [user, setUser] = useState(null);
+
+  // Ελέγχουμε αν υπάρχει αποθηκευμένος χρήστης στο localStorage όταν φορτώνει η εφαρμογή
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  }, []);
+
+  // Αποθήκευση χρήστη κατά τη σύνδεση/εγγραφή
+  const handleLoginSuccess = (userData) => {
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
+  };
+
+  // Αφαίρεση χρήστη κατά την αποσύνδεση
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('user');
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="App">
+      <h1>MovieBook</h1>
+
+      {user ? (
+        <div style={styles.welcomeContainer}>
+          <h2>Welcome, {user.email}!</h2>
+          <p>You are logged in.</p>
+          <button onClick={handleLogout} style={styles.logoutBtn}>
+            Logout
+          </button>
         </div>
+      ) : isLogin ? (
         <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+          <Login onLoginSuccess={handleLoginSuccess} />
+          <p style={styles.text}>
+            Don't have an account?{' '}
+            <button 
+              onClick={() => setIsLogin(false)} 
+              style={styles.toggleBtn}
+            >
+              Register
+            </button>
           </p>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      ) : (
+        <div>
+          <Register onLoginSuccess={handleLoginSuccess} />
+          <p style={styles.text}>
+            Already have an account?{' '}
+            <button 
+              onClick={() => setIsLogin(true)} 
+              style={styles.toggleBtn}
+            >
+              Login
+            </button>
+          </p>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      )}
+    </div>
+  );
 }
 
-export default App
+const styles = {
+  text: {
+    marginTop: '16px',
+    color: '#ccc',
+    fontSize: '14px'
+  },
+  toggleBtn: {
+    background: 'none',
+    border: 'none',
+    color: '#646cff',
+    textDecoration: 'underline',
+    cursor: 'pointer',
+    fontSize: '14px',
+    fontWeight: 'bold',
+    padding: 0
+  },
+  welcomeContainer: {
+    maxWidth: '400px',
+    margin: '40px auto',
+    padding: '24px',
+    borderRadius: '8px',
+    backgroundColor: '#1e1e1e',
+    color: '#ffffff'
+  },
+  logoutBtn: {
+    padding: '10px 20px',
+    borderRadius: '4px',
+    border: 'none',
+    backgroundColor: '#ff4d4d',
+    color: '#fff',
+    fontSize: '14px',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    marginTop: '16px'
+  }
+};
+
+export default App;
