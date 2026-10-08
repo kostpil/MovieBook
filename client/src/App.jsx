@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import Login from './components/Login';
 import Register from './components/Register';
-import './App.css';
+import Profile from './components/Profile';
+import logo from './assets/MovieBook logo.png';
 
 function App() {
-  const [isLogin, setIsLogin] = useState(true);
   const [user, setUser] = useState(null);
+  const [isLogin, setIsLogin] = useState(true);
 
-  // Ελέγχουμε αν υπάρχει αποθηκευμένος χρήστης στο localStorage όταν φορτώνει η εφαρμογή
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
@@ -15,32 +15,24 @@ function App() {
     }
   }, []);
 
-  // Αποθήκευση χρήστη κατά τη σύνδεση/εγγραφή
   const handleLoginSuccess = (userData) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
   };
 
-  // Αφαίρεση χρήστη κατά την αποσύνδεση
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');
   };
 
   return (
-    <div className="App">
-      <h1>MovieBook</h1>
+    <div style={styles.appContainer}>
+      <img src={logo} alt="MovieBook Logo" style={styles.logo} />
 
       {user ? (
-        <div style={styles.welcomeContainer}>
-          <h2>Welcome, {user.email}!</h2>
-          <p>You are logged in.</p>
-          <button onClick={handleLogout} style={styles.logoutBtn}>
-            Logout
-          </button>
-        </div>
+        <Profile user={user} onLogout={handleLogout} />
       ) : isLogin ? (
-        <div>
+        <div style={styles.cardWrapper}>
           <Login onLoginSuccess={handleLoginSuccess} />
           <p style={styles.text}>
             Don't have an account?{' '}
@@ -53,7 +45,7 @@ function App() {
           </p>
         </div>
       ) : (
-        <div>
+        <div style={styles.cardWrapper}>
           <Register onLoginSuccess={handleLoginSuccess} />
           <p style={styles.text}>
             Already have an account?{' '}
@@ -71,6 +63,27 @@ function App() {
 }
 
 const styles = {
+  appContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
+    width: '100%',
+    boxSizing: 'border-box',
+    padding: '20px'
+  },
+  logo: {
+    width: '570px',
+    height: 'auto',
+    marginBottom: '1px',
+    objectFit: 'contain'
+  },
+  cardWrapper: {
+    width: '100%',
+    maxWidth: '400px',
+    textAlign: 'center'
+  },
   text: {
     marginTop: '16px',
     color: '#ccc',
@@ -85,25 +98,6 @@ const styles = {
     fontSize: '14px',
     fontWeight: 'bold',
     padding: 0
-  },
-  welcomeContainer: {
-    maxWidth: '400px',
-    margin: '40px auto',
-    padding: '24px',
-    borderRadius: '8px',
-    backgroundColor: '#1e1e1e',
-    color: '#ffffff'
-  },
-  logoutBtn: {
-    padding: '10px 20px',
-    borderRadius: '4px',
-    border: 'none',
-    backgroundColor: '#ff4d4d',
-    color: '#fff',
-    fontSize: '14px',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    marginTop: '16px'
   }
 };
 

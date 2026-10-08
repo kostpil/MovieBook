@@ -18,7 +18,6 @@ function Login({ onLoginSuccess }) {
     console.log('Form submitted:', formData);
     alert('Login successful!');
 
-    // Ενημερώνουμε το App.jsx ότι ο χρήστης συνδέθηκε επιτυχώς
     if (onLoginSuccess) {
       onLoginSuccess(formData);
     }
@@ -61,15 +60,15 @@ function Login({ onLoginSuccess }) {
 }
 
 const styles = {
-  container: {
-    maxWidth: '400px',
-    margin: '40px auto',
-    padding: '24px',
-    borderRadius: '8px',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-    backgroundColor: '#1e1e1e',
-    color: '#ffffff',
-    textAlign: 'left'
+ container: {
+  width: '100%',
+  padding: '24px',
+  borderRadius: '8px',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+  backgroundColor: '#1e1e1e',
+  color: '#ffffff',
+  textAlign: 'left',
+  boxSizing: 'border-box'
   },
   form: {
     display: 'flex',

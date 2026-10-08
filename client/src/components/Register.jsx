@@ -9,7 +9,6 @@ function Register() {
     password: ''
   });
 
-  // Update form state on user input
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -17,7 +16,6 @@ function Register() {
     });
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
@@ -100,15 +98,15 @@ function Register() {
 
 const styles = {
   container: {
-    maxWidth: '400px',
-    margin: '40px auto',
-    padding: '24px',
-    borderRadius: '8px',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-    backgroundColor: '#1e1e1e',
-    color: '#ffffff',
-    textAlign: 'left'
-  },
+  width: '100%',
+  padding: '24px',
+  borderRadius: '8px',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+  backgroundColor: '#1e1e1e',
+  color: '#ffffff',
+  textAlign: 'left',
+  boxSizing: 'border-box'
+},
   form: {
     display: 'flex',
     flexDirection: 'column',
